@@ -1,0 +1,16 @@
+{
+  "name": "mitographwrapper",
+  "version": "0.1.0",
+  "description": "A simple Electron gui wrapper for the MitoGraph cli application.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Tristan Kreindler",
+  "dependencies": {
+    "electron": "^5.0.7"
+  },
+  "devDependencies": {
+    "child_process": "^1.0.2"
+  }
+}
