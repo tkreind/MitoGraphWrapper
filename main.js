@@ -1,39 +1,74 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const exec = require('child_process').exec;
+const spawn = require('child_process').spawn;
 
 let win;
 
 function createWindow() {
-    win = new BrowserWindow({ 
-		width: 800, 
+	win = new BrowserWindow({
+		width: 800,
 		height: 600,
 		webPreferences: {
-            nodeIntegration: true
-        }
+			nodeIntegration: true
+		}
 	});
 	win.loadURL(`file://${__dirname}/index.html`);
-	
-	
+
+
 }
 
-ipcMain.on('submitForm', function(event, data) {
-	console.log("hit")
+let child_processes = [];
+
+ipcMain.on('submitForm', function (event, data) {
+
+	let arguments = [
+		"-xy",
+		data.xy,
+		"-z",
+		data.z,
+		"-path",
+		data.path,
+	];
+
+	if (data.adaptive.trim().length != 0) {
+		arguments.push("-adaptive " + data.adaptive.trim())
+	}
+	if (data.threshold.trim().length != 0) {
+		arguments.push("-threshold " + data.threshold.trim())
+	}
+	if (data.scales.a.trim().length != 0) {
+		arguments.push("-scales " + data.scales.a.trim() + " " + data.scales.b.trim() + " " + data.scales.c.trim())
+	}
+
+	if (data.binary) {
+		arguments.push("-binary")
+	}
+	if (data.vtk) {
+		arguments.push("-vtk")
+	}
+	if (data.labels_off) {
+		arguments.push("-labels_off")
+	}
+	if (data.analyze) {
+		arguments.push("-analyze")
+	}
+
+	// create the child process that will run the cli program
+	child_processes.push(spawn(data.program.trim(), arguments, { stdio: 'inherit' }));
+
 });
 
-function runChild() {
-	// create the child process that will run the cli program
-	var child = exec("ping -c 5 127.0.0.1");
-
-	// use event hooks to provide a callback to execute when data are available: 
-	child.stdout.on(
-		'data', 
-		function(data) {
-			console.log(data.toString()); 
-		}
-	);
-}
-
+// default create function
 app.on('ready', createWindow);
 
+// quit application when all windows closed
+app.on('window-close-all', () => {
+	app.quit();
+});
 
+// on quit kill all child processes
+app.on('quit', () => {
+	child_processes.forEach(function(child) {
+		child.kill();
+	});
+});
 

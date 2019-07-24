@@ -17,10 +17,10 @@ function submit() {
 		},
 		threshold: form["-threshold"].value,
 		adaptive: form["-adaptive"].value,
-		binary: form["-binary"].value,
-		vtk: form["-vtk"].value,
-		labels_off: form["-labels_off"].value,
-		analyze: form["-analyze"].value,
+		binary: form["-binary"].checked,
+		vtk: form["-vtk"].checked,
+		labels_off: form["-labels_off"].checked,
+		analyze: form["-analyze"].checked,
 
 	}
 	ipcRenderer.send('submitForm', data);
