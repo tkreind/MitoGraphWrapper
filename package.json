@@ -11,6 +11,7 @@
     "electron": "^5.0.7"
   },
   "devDependencies": {
-    "child_process": "^1.0.2"
+    "child_process": "^1.0.2",
+    "node-cleanup": "^2.1.2"
   }
 }

@@ -25,3 +25,8 @@ function submit() {
 	}
 	ipcRenderer.send('submitForm', data);
 }
+
+ipcRenderer.on('updateLog', function (event, data) {
+	var logText = document.getElementById("logText")
+	console.log("test")
+});
