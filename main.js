@@ -12,8 +12,6 @@ function createWindow() {
 		}
 	});
 	win.loadURL(`file://${__dirname}/index.html`);
-
-
 }
 
 var child_process;
@@ -21,7 +19,7 @@ var child_process;
 ipcMain.on('submitForm', function (event, data) {
 
 	// kill process if it exists
-	if(child_process) {
+	if (child_process) {
 		child_process.kill();
 	}
 
@@ -60,12 +58,12 @@ ipcMain.on('submitForm', function (event, data) {
 	// create the child process that will run the cli program
 	child_process = spawn(data.program.trim(), arguments);
 
+	win.webContents.send('updateLog', "Process is running.");
+
 	// pipe the stdout of this process to make it useable
-	child_process.stdout.on('data', function(data) {
-		var test = data.toString();
-		console.log(test);
-	 });
-	 
+	child_process.stdout.on('data', function (data) {
+		win.webContents.send('updateLog', data.toString());
+	});
 
 	child_process.on('close', (code) => {
 		console.log(`child process exited with code ${code}`);
@@ -84,7 +82,7 @@ app.on('window-close-all', () => {
 
 // function to clean up all child processes
 function killChildren() {
-	if(child_process) {
+	if (child_process) {
 		child_process.kill();
 	}
 	child_process = null;
@@ -96,19 +94,19 @@ process.on('exit', () => {
 });
 
 //catches ctrl+c event
-process.on('SIGINT', () => { 
-	killChildren() 
+process.on('SIGINT', () => {
+	killChildren()
 });
 
 // catches "kill pid" (for example: nodemon restart)
-process.on('SIGUSR1', () => { 
-	killChildren() 
+process.on('SIGUSR1', () => {
+	killChildren()
 });
-process.on('SIGUSR2', () => { 
-	killChildren() 
+process.on('SIGUSR2', () => {
+	killChildren()
 });
 
 //catches uncaught exceptions
-process.on('uncaughtException', () => { 
+process.on('uncaughtException', () => {
 	killChildren()
 });

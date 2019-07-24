@@ -28,5 +28,5 @@ function submit() {
 
 ipcRenderer.on('updateLog', function (event, data) {
 	var logText = document.getElementById("logText")
-	console.log("test")
+	logText.textContent = data;
 });

@@ -5,7 +5,7 @@
 	<title>App</title>
 </head>
 <body>
-	<form id="arguments">
+	<form id="arguments" onsubmit="return false">
 		<p>
 			Program File <input type="text" name="-program" value="/Users/tristan/Downloads/MitoGraph" required>
 		</p>
@@ -44,7 +44,7 @@
 		</p>
 	</form>
 	
-	<p id="logText"></p>
+	<p><span id="logText">unchanged</span></p>
 
 	<script src="window.js"></script>
 </body>
