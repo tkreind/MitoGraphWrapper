@@ -14,9 +14,12 @@ function createWindow() {
 	var child = exec("ping -c 5 127.0.0.1");
 
 	// use event hooks to provide a callback to execute when data are available: 
-	child.stdout.on('data', function(data) {
-		console.log(data.toString()); 
-	});
+	child.stdout.on(
+		'data', 
+		function(data) {
+			console.log(data.toString()); 
+		}
+	);
 }
 
 app.on('ready', createWindow);
