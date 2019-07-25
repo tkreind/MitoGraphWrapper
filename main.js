@@ -50,14 +50,7 @@ function createWindow() {
 	downloadMitoGraph();
 }
 
-var child_process;
-
 ipcMain.on('submitForm', function (event, data) {
-
-	// kill process if it exists
-	if (child_process) {
-		child_process.kill();
-	}
 
 	let arguments = [
 		"-xy",
@@ -111,33 +104,33 @@ app.on('window-close-all', () => {
 	app.quit();
 });
 
-// function to clean up all child processes
-function killChildren() {
-	if (child_process) {
-		child_process.kill();
-	}
-	child_process = null;
-}
+// // function to clean up all child processes
+// function killChildren() {
+// 	if (child_process) {
+// 		child_process.kill();
+// 	}
+// 	child_process = null;
+// }
 
-// on exit kill all child processes
-process.on('exit', () => {
-	killChildren()
-});
+// // on exit kill all child processes
+// process.on('exit', () => {
+// 	killChildren()
+// });
 
-//catches ctrl+c event
-process.on('SIGINT', () => {
-	killChildren()
-});
+// //catches ctrl+c event
+// process.on('SIGINT', () => {
+// 	killChildren()
+// });
 
-// catches "kill pid" (for example: nodemon restart)
-process.on('SIGUSR1', () => {
-	killChildren()
-});
-process.on('SIGUSR2', () => {
-	killChildren()
-});
+// // catches "kill pid" (for example: nodemon restart)
+// process.on('SIGUSR1', () => {
+// 	killChildren()
+// });
+// process.on('SIGUSR2', () => {
+// 	killChildren()
+// });
 
-//catches uncaught exceptions
-process.on('uncaughtException', () => {
-	killChildren()
-});
+// //catches uncaught exceptions
+// process.on('uncaughtException', () => {
+// 	killChildren()
+// });
