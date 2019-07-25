@@ -7,10 +7,7 @@
 <body>
 	<form id="arguments" onsubmit="return false">
 		<p>
-			Program File <input type="text" name="-program" value="/Users/tristan/Downloads/MitoGraph" required>
-		</p>
-		<p>
-			-path <input type="text" name="-path" value="/Users/tristan/Downloads/MitoGraphTools-1.0" required>
+			-path <button id="filePath">Select File Path</button>
 		</p>
 		<p>
 			-xy <input type="text" name="-xy" value="0.056" required>
@@ -43,8 +40,6 @@
 			<input type="submit" value="Submit">
 		</p>
 	</form>
-	
-	<p><span id="logText">unchanged</span></p>
 
 	<script src="window.js"></script>
 </body>

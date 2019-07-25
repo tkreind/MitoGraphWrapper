@@ -8,10 +8,10 @@
   },
   "author": "Tristan Kreindler",
   "dependencies": {
+    "applescript": "^1.0.0",
+    "child_process": "^1.0.2",
+    "download-github-release": "^0.3.2",
     "electron": "^5.0.7"
   },
-  "devDependencies": {
-    "child_process": "^1.0.2",
-    "node-cleanup": "^2.1.2"
-  }
+  "devDependencies": {}
 }

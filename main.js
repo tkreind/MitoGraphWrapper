@@ -1,7 +1,41 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const spawn = require('child_process').spawn;
+const exec = require('child_process').exec;
+const downloadRelease = require('download-github-release');
+const fs = require('fs');
+const applescript = require('applescript');
+
+let downloadDir;
 
 let win;
+
+// downloads the latest version of MitoGraph
+function downloadMitoGraph() {
+	downloadDir = process.env.TMPDIR;
+
+	// Define a function to filter releases.
+	const filterRelease = function (release) {
+		// Filter out prereleases.
+		return release.prerelease === false;
+	}
+
+	// Define a function to filter assets.
+	const filterAsset = function (asset) {
+		// Select assets that contain the string 'OSX'.
+		return asset.name.indexOf('OSX') >= 0;
+	}
+
+	if (!fs.existsSync(downloadDir + "/downloads")) {
+		fs.mkdirSync(downloadDir + "/downloads");
+	}
+
+	downloadRelease('vianamp', 'MitoGraph', downloadDir + "/downloads", filterRelease, filterAsset, false)
+		.then(function () {
+			console.log('All done!');
+		})
+		.catch(function (err) {
+			console.error(err.message);
+		});
+}
 
 function createWindow() {
 	win = new BrowserWindow({
@@ -12,6 +46,8 @@ function createWindow() {
 		}
 	});
 	win.loadURL(`file://${__dirname}/index.html`);
+
+	downloadMitoGraph();
 }
 
 var child_process;
@@ -56,18 +92,13 @@ ipcMain.on('submitForm', function (event, data) {
 	}
 
 	// create the child process that will run the cli program
-	child_process = spawn(data.program.trim(), arguments);
+	const mitoScript = downloadDir + "/downloads/MitoGraph " + arguments.join(' ');
+	const script = 'tell app "Terminal" to do script "' + mitoScript + '" & activate';
 
-	win.webContents.send('updateLog', "Process is running.");
-
-	// pipe the stdout of this process to make it useable
-	child_process.stdout.on('data', function (data) {
-		win.webContents.send('updateLog', data.toString());
-	});
-
-	child_process.on('close', (code) => {
-		console.log(`child process exited with code ${code}`);
-		child_process = null;
+	applescript.execString(script, (err, rtn) => {
+		if (err) {
+			// Something went wrong!
+		}
 	});
 
 });

@@ -6,11 +6,17 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+# downloads
+downloads/
+
+# release dir
+mitographwrapper-darwin-x64/
+
 # mac files
 .DS_Store
 
 # vs code
-.vscode
+.vscode/
 
 # executable
 MitoGraph

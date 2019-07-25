@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron');
+const {dialog} = require('electron').remote;
 
 var form = document.getElementById("arguments");
 form.addEventListener("submit",submit,false);
@@ -6,8 +7,7 @@ form.addEventListener("submit",submit,false);
 function submit() {
 	var form = document.getElementById("arguments");
 	var data = {
-		program: form["-program"].value,
-		path: form["-path"].value,
+		path: filePath,
 		xy: form["-xy"].value,
 		z: form["-z"].value,
 		scales: {
@@ -26,7 +26,15 @@ function submit() {
 	ipcRenderer.send('submitForm', data);
 }
 
-ipcRenderer.on('updateLog', function (event, data) {
-	var logText = document.getElementById("logText")
-	logText.textContent = data;
+var filePath;
+
+document.querySelector('#filePath').addEventListener('click', function (event) {
+    dialog.showOpenDialog({
+        properties: ['openDirectory']
+    }, function (directory) {
+        if (directory !== undefined) {
+			filePath = directory
+			document.getElementById("filePath").innerHTML = directory
+        }
+    });
 });
